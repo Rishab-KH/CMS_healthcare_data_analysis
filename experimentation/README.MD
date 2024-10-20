@@ -1,1 +1,1 @@
-This file details all the experiments in Jupyter Notebook for analysis
+- This file details all the experiments in Jupyter Notebook for analysis
