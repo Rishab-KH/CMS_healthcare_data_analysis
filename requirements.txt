@@ -1,0 +1,3 @@
+# Runtime dependency for the wheel. PySpark/Delta are provided by the
+# Databricks Runtime, so they are NOT pinned here (only in the [dev] extra).
+pyyaml>=6.0

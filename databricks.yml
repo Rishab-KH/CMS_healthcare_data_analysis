@@ -1,0 +1,50 @@
+# =============================================================================
+# Databricks Asset Bundle (DAB)
+# Deploy with:   databricks bundle deploy -t dev
+# Run with:      databricks bundle run healthcare_pipeline -t dev
+# DAB builds the wheel, uploads it, and creates/updates the job + tasks below.
+# =============================================================================
+bundle:
+  name: healthcare-pipeline
+
+# Build the Python wheel from pyproject.toml on every deploy.
+artifacts:
+  healthcare_wheel:
+    type: whl
+    build: python -m build --wheel
+    path: .
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog for this environment.
+  node_type:
+    description: Worker node type.
+    default: Standard_DS3_v2
+  spark_version:
+    description: Databricks Runtime version.
+    default: 15.4.x-scala2.12
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-0000000000000000.0.azuredatabricks.net
+    variables:
+      catalog: healthcare_dev
+    run_as:
+      user_name: ${workspace.current_user.userName}
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-1111111111111111.1.azuredatabricks.net
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: healthcare_prod
+      node_type: Standard_DS4_v2
+    run_as:
+      service_principal_name: ${var.deploy_sp}

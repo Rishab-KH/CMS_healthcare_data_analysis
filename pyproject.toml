@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "healthcare-pipeline"
+version = "1.0.0"
+description = "Healthcare Medicare Part D medallion pipeline on Azure Databricks + Delta Lake"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Installed locally for unit tests; on Databricks these come from the runtime.
+dev = [
+    "pyspark==3.5.0",
+    "delta-spark==3.1.0",
+    "pandas>=2.0",
+    "pytest>=7.4",
+    "ruff>=0.4",
+    "black>=24.0",
+]
+
+# Console scripts invoked by Databricks `python_wheel_task` entries.
+[project.scripts]
+healthcare-pipeline = "healthcare_pipeline.pipeline.run_pipeline:main"
+healthcare-ingest = "healthcare_pipeline.entrypoints:ingest_task"
+healthcare-preprocess = "healthcare_pipeline.entrypoints:preprocess_task"
+healthcare-transform = "healthcare_pipeline.entrypoints:transform_task"
+healthcare-publish = "healthcare_pipeline.entrypoints:publish_task"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
