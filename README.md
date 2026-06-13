@@ -23,7 +23,7 @@ reading `MAX(id)`, and embedded DB credentials in the JDBC URL. This version
 keeps the same business logic but modernises the platform and practices:
 
 | Concern | Azure/Databricks |
-|---|---|---|
+|---|---|
 | Object store | ADLS Gen2 + **managed Delta tables** |
 | Table format | **Delta** (ACID, schema enforcement, time travel) |
 | Catalog | **Unity Catalog** `catalog.schema.table` + grants |
