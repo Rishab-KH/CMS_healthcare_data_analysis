@@ -22,21 +22,21 @@ The original project wrote daily Parquet partitions to three S3 buckets
 reading `MAX(id)`, and embedded DB credentials in the JDBC URL. This version
 keeps the same business logic but modernises the platform and practices:
 
-| Concern | Original (AWS) | This project (Azure/Databricks) |
+| Concern | Azure/Databricks |
 |---|---|---|
-| Object store | S3 (`s3a://`) Parquet | ADLS Gen2 + **managed Delta tables** |
-| Table format | Parquet files | **Delta** (ACID, schema enforcement, time travel) |
-| Catalog | bucket/prefix paths | **Unity Catalog** `catalog.schema.table` + grants |
-| Zones | raw / cleansed / curated | **bronze / silver / gold** |
-| Compute | Spark (EMR/local) | **Databricks** (reuses platform session) |
-| Source DB | Postgres | **Azure Database for PostgreSQL** |
-| Serving DB | MySQL | **Azure SQL Database** |
-| Incremental | object count + `MAX(id)`, append | watermark + **Delta `MERGE`** (idempotent) |
-| Config | `configparser` + `.cfg` | typed YAML + **env overlays** |
-| Secrets | in JDBC URL / cfg | **Key Vault-backed secret scope** |
-| Orchestration | single `main()` script | **Databricks Job DAG** (per-layer tasks) |
-| Deployment | manual | **Databricks Asset Bundles** (IaC) |
-| Error handling | repeated try/except | **Template-Method `Stage`** base class |
+| Object store | ADLS Gen2 + **managed Delta tables** |
+| Table format | **Delta** (ACID, schema enforcement, time travel) |
+| Catalog | **Unity Catalog** `catalog.schema.table` + grants |
+| Zones | **bronze / silver / gold** |
+| Compute | **Databricks** (reuses platform session) |
+| Source DB | **Azure Database for PostgreSQL** |
+| Serving DB |**Azure SQL Database** |
+| Incremental | watermark + **Delta `MERGE`** (idempotent) |
+| Config | typed YAML + **env overlays** |
+| Secrets | **Key Vault-backed secret scope** |
+| Orchestration | **Databricks Job DAG** (per-layer tasks) |
+| Deployment | **Databricks Asset Bundles** (IaC) |
+| Error handling | **Template-Method `Stage`** base class |
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for diagrams and lineage.
 
